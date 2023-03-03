@@ -12,4 +12,3 @@ def minOperations(n):
                 res += i
                 n //= i
     return res + n if n > 1 else res
-    
