@@ -1,41 +1,58 @@
 #!/usr/bin/python3
-"""module docs"""
+""" Script that reads stdin line by line and computes metrics """
 import sys
 
-
-def handleTen(statCount, fileSize):
-    print("File size: {}".format(fileSize))
-    for key in sorted(statCount.keys()):
-        if statCount[key] == 0:
-            continue
-        print("{}: {}".format(key, statCount[key]))
+cont = 0
+cont_size = 0
+status = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0, "404": 0,
+                    "405": 0, "500": 0}
 
 
-def log_parsing():
-    """function docs"""
-    c = size = 0
-    counter = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0,
-               "404": 0, "405": 0, "500": 0}
+def dict_status(status_code):
+    if status_code == "200":
+        status["200"] += 1
+    elif status_code == "301":
+        status["301"] += 1
+    elif status_code == "400":
+        status["400"] += 1
+    elif status_code == "401":
+        status["401"] += 1
+    elif status_code == "403":
+        status["403"] += 1
+    elif status_code == "404":
+        status["404"] += 1
+    elif status_code == "405":
+        status["405"] += 1
+    elif status_code == "500":
+        status["500"] += 1
 
+
+if __name__ == '__main__':
     try:
         for line in sys.stdin:
-            c += 1
-            split = line.split(" ")
-            try:
-                status = split[-2]
-                size += int(split[-1])
-                if status in counter:
-                    counter[status] += 1
-            except Exception:
-                pass
-            if c % 10 == 0:
-                handleTen(counter, size)
-        else:
-            handleTen(counter, size)
-    except (KeyboardInterrupt, SystemExit):
-        handleTen(counter, size)
+            cont += 1
+            array_line = line.split(' ')
+            status_code = array_line[7]
+            dict_status(status_code)
+            size = int(array_line[8][0:-1])
+            cont_size += size
+
+            if cont == 10:
+                print("File size: {}".format(cont_size))
+
+                for k, v in status.items():
+                    if v != 0:
+                        print("{}: {}".format(k, v))
+                    status[k] = 0
+
+                cont = 0
+                cont_size = 0
+
+    except KeyboardInterrupt:
+        print("File size: {}".format(cont_size))
+
+        for k, v in status.items():
+            if v != 0:
+                print("{}: {}".format(k, v))
+
         raise
-
-
-if __name__ == "__main__":
-    log_parsing()
