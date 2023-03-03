@@ -39,4 +39,3 @@ def log_parsing():
 
 if __name__ == "__main__":
     log_parsing()
-    
