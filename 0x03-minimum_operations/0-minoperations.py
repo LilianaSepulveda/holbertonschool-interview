@@ -2,6 +2,7 @@
 """documentation"""
 import math
 
+
 def minOperations(n):
     """documentation"""
     res = 0
