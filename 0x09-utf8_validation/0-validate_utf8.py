@@ -27,4 +27,3 @@ def validUTF8(data):
             return False
         valid = max(valid - 1, 0)
     return valid == 0
-    
